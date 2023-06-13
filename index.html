@@ -1,0 +1,63 @@
+<head>
+  <style>
+    /* 盤面の CSS */
+    .container {
+      width: 360px;
+      height: 360px;
+      border: 1px solid red;
+      display: flex;   /* 配置を Flexbox を用いるように指定 */
+      flex-wrap: wrap; /* 中身の折り返しを "左上から右下" に指定 */
+    }
+
+    /* ピースの CSS */
+    .item {
+      background-color: aliceblue;
+      width: 90px;
+      height: 90px;
+      border: 1px solid blue;
+      box-sizing: border-box; /* 最終的なエリアの大きさを "枠線と余白を考慮する" に指定 */
+      line-height: 90px;      /* テキスト部分の行の高さを、ピースの縦幅と同じ大きさに指定 */
+      text-align: center;     /* テキストの横揃えを "中心" に指定 */
+      vertical-align: middle; /* テキストの縦揃えを "中心" に指定 */
+    }
+  
+    /* 個々のピースの位置を決める CSS */
+    .piece-1  { order: 1;  }
+    .piece-2  { order: 2;  }
+    .piece-3  { order: 3;  }
+    .piece-4  { order: 4;  }
+    .piece-5  { order: 5;  }
+    .piece-6  { order: 6;  }
+    .piece-7  { order: 7;  }
+    .piece-8  { order: 8;  }
+    .piece-9  { order: 9;  }
+    .piece-10 { order: 10; }
+    .piece-11 { order: 11; }
+    .piece-12 { order: 12; }
+    .piece-13 { order: 13; }
+    .piece-14 { order: 14; }
+    .piece-15 { order: 15; }
+    .piece-16 { order: 16; }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="item piece-1">1</div>
+    <div class="item piece-2">2</div>
+    <div class="item piece-3">3</div>
+    <div class="item piece-4">4</div>
+    <div class="item piece-5">5</div>
+    <div class="item piece-6">6</div>
+    <div class="item piece-7">7</div>
+    <div class="item piece-8">8</div>
+    <div class="item piece-9">9</div>
+    <div class="item piece-10">10</div>
+    <div class="item piece-11">11</div>
+    <div class="item piece-12">12</div>
+    <div class="item piece-13">13</div>
+    <div class="item piece-14">14</div>
+    <div class="item piece-15">15</div>
+    <div class="item piece-16"></div>
+  </div>
+</body>
