@@ -1,27 +1,32 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>15 パズル</title>
+
   <style>
-    /* 盤面の CSS */
     .container {
       width: 360px;
       height: 360px;
       border: 1px solid red;
-      display: flex;   /* 配置を Flexbox を用いるように指定 */
-      flex-wrap: wrap; /* 中身の折り返しを "左上から右下" に指定 */
+      display: flex;
+      flex-wrap: wrap;
     }
 
-    /* ピースの CSS */
     .item {
-      background-color: aliceblue;
       width: 90px;
       height: 90px;
+      line-height: 90px;
       border: 1px solid blue;
-      box-sizing: border-box; /* 最終的なエリアの大きさを "枠線と余白を考慮する" に指定 */
-      line-height: 90px;      /* テキスト部分の行の高さを、ピースの縦幅と同じ大きさに指定 */
-      text-align: center;     /* テキストの横揃えを "中心" に指定 */
-      vertical-align: middle; /* テキストの縦揃えを "中心" に指定 */
+      box-sizing: border-box;
+      background-color: aliceblue;
+      text-align: center;
+      vertical-align: middle;
     }
-  
-    /* 個々のピースの位置を決める CSS */
+
     .piece-1  { order: 1;  }
     .piece-2  { order: 2;  }
     .piece-3  { order: 3;  }
@@ -39,6 +44,8 @@
     .piece-15 { order: 15; }
     .piece-16 { order: 16; }
   </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 </head>
 
 <body>
@@ -60,4 +67,31 @@
     <div class="item piece-15">15</div>
     <div class="item piece-16"></div>
   </div>
+
+<script>
+// Model、すなわち "ピースの順番を管理する配列" を用意する
+var model = [ 2, 1, 3, 4, 5, 7, 6, 8, 9, 11, 10, 12, 13, 14, 15, 16 ];
+
+// Model → View への反映部分を作成する (そのような処理を通称 "コンポーネント" と呼ぶ)
+function component() {
+  var views = document.querySelectorAll(".item");
+
+  for (var index = 0; index <= 15; index = index + 1) {
+    // Model の内容を、対応する View に反映する
+    // 今回であれば、あるピースの順番を、CSS の order に反映する
+    views[index].style.order = model[index];
+  }
+}
+
+function shufflePieces() {
+  // Model を _.shuffle でシャッフルし、シャッフル結果を再度代入する
+  // 参考 → https://lodash.com/docs/4.17.15#shuffle
+  model = _.shuffle(model);
+}
+
+shufflePieces();
+component();
+</script>
 </body>
+
+</html>
