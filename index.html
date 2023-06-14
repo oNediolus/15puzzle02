@@ -69,8 +69,11 @@
   </div>
 
 <script>
-// Model、すなわち "ピースの順番を管理する配列" を用意する
-var model = [ 2, 1, 3, 4, 5, 7, 6, 8, 9, 11, 10, 12, 13, 14, 15, 16 ];
+// [Model] "ピースの順番を管理する配列" を用意する
+var ordersModel = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 ];
+
+// [Model] 空白ピース基準で、移動が許されるピースの order を格納する
+var movableOrdersModel = [ 12, 15 ];
 
 // Model → View への反映部分を作成する (そのような処理を通称 "コンポーネント" と呼ぶ)
 function component() {
@@ -79,18 +82,84 @@ function component() {
   for (var index = 0; index <= 15; index = index + 1) {
     // Model の内容を、対応する View に反映する
     // 今回であれば、あるピースの順番を、CSS の order に反映する
-    views[index].style.order = model[index];
+    views[index].style.order = ordersModel[index];
   }
 }
 
 function shufflePieces() {
   // Model を _.shuffle でシャッフルし、シャッフル結果を再度代入する
   // 参考 → https://lodash.com/docs/4.17.15#shuffle
-  model = _.shuffle(model);
+  ordersModel = _.shuffle(ordersModel);
 }
 
-shufflePieces();
-component();
+// 空白ピースに対して、上下左右のピースに対応する order 番号を求める
+function findAdjacentOfEmpty() {
+    // 全体の order を管理する Model の、16 番目が空白ピースの order
+    var emptyOrder = ordersModel[15];
+
+    movableOrdersModel = [
+        emptyOrder - 4,
+        emptyOrder + 4,
+    ];
+    
+    // 左端の order でないなら、-1 の order を左隣として考えることができる
+    if (emptyOrder % 4 !== 1) {
+        movableOrdersModel.push(emptyOrder - 1);
+    }
+
+    // 右端の order でないなら、+1 の order を右隣として考えることができる
+    if (emptyOrder % 4 !== 0) {
+        movableOrdersModel.push(emptyOrder + 1);
+    }
+
+    // 1 以上の order 番号を残す処理
+    movableOrdersModel = movableOrdersModel.filter(x => 1 <= x);
+
+    // 16 以下の order 番号を残す処理
+    movableOrdersModel = movableOrdersModel.filter(x => x <= 16);
+}
+
+function initializeTapOperations() {
+  var elements = document.querySelectorAll(".item");
+
+  // 事前に、タップされた時に行ってほしいことを関数として用意しておく
+  // 引数には Event が起こった時の詳細な情報が渡される
+  function onTapped(event) {
+    findAdjacentOfEmpty();
+
+    // タップされたピースの order を取得
+    const tappedOrder = Number(event.target.style.order);
+
+    // タップされたピースの番号を取得
+    const tappedPiece = Number(event.target.innerHTML) - 1;
+
+    // タップされたピースの order が、movableOrdersModel 配列に含まれるかを調べる
+    if (movableOrdersModel.includes(tappedOrder)) {
+      const temp = ordersModel[15];
+      ordersModel[15] = tappedOrder;
+      ordersModel[tappedPiece] = temp;
+
+      component();
+    }
+
+    // 数字が順番に並んでいるかの判定を行う
+    if (String(ordersModel) === '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16') {
+      setTimeout(() => alert('クリア！'), 0);
+    };
+  }
+
+  // elements 変数 (配列) の中身を for 文でひとつずつ取り出す
+  for (var elem of elements) {
+    // Event とは "なんらかの物事"
+    // 物事が起こった時だけ処理を行う仕組みが addEventListener
+    // 処理の登録は、事前に作成した関数を渡すことで行う
+    elem.addEventListener('click', onTapped);
+  }
+}
+
+initializeTapOperations(); // 各ピースに対して、タップ時の処理を登録する (1 回のみで OK)
+shufflePieces();           // Model をシャッフルする (1 回のみで OK)
+component();               // Model → View への反映を行う
 </script>
 </body>
 
